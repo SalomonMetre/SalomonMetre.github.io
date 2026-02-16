@@ -51,33 +51,77 @@
             filter: blur(50px);
         }
 
-        nav {
+        /* Desktop Nav */
+        nav#desktop-nav {
             position: fixed;
             top: 30px;
             right: 40px;
             z-index: 1000;
             display: flex;
             gap: 20px;
-            max-width: 90vw;
-            overflow-x: auto;
-            padding-bottom: 5px;
-            scrollbar-width: none; /* Firefox */
         }
-        
-        nav::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
-        nav a {
+        nav#desktop-nav a {
             color: var(--text-dim);
             text-decoration: none;
             font-size: 0.7rem;
             letter-spacing: 2px;
             text-transform: lowercase;
             transition: 0.3s;
-            white-space: nowrap;
         }
 
-        nav a:hover {
+        nav#desktop-nav a:hover {
             color: var(--pure-white);
+        }
+
+        /* Mobile Menu Controls */
+        #mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--grid-color);
+            color: var(--pure-white);
+            padding: 10px 15px;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(5, 5, 5, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1900;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        #mobile-nav.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #mobile-nav a {
+            color: var(--pure-white);
+            text-decoration: none;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-transform: lowercase;
         }
 
         .page-container {
@@ -150,11 +194,6 @@
             border-radius: 14px;
         }
 
-        .profile-photo img:hover {
-            filter: grayscale(0%) brightness(1) contrast(1);
-            transform: scale(1.05);
-        }
-
         .special-name {
             background: var(--name-shade);
             -webkit-background-clip: text;
@@ -186,14 +225,12 @@
             vertical-align: middle;
         }
 
-        .discovery-trigger:hover {
-            border-color: #fff;
-            color: #fff;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
         .circle-menu {
             position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* Centers the anchor point */
             pointer-events: none;
             opacity: 0;
             transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
@@ -207,6 +244,11 @@
 
         .menu-item {
             position: absolute;
+            /* Centers the item's own center point on the calculated X/Y coordinates */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
             white-space: nowrap;
             background: rgba(0, 0, 0, 0.95);
             border: 1px solid #333;
@@ -215,14 +257,13 @@
             font-size: 0.75rem;
             color: var(--text-dim);
             text-decoration: none;
-            transition: 0.3s;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             cursor: pointer;
         }
 
         .menu-item:hover {
             color: #fff;
             border-color: #fff;
-            background: #111;
         }
 
         /* Builds Grid */
@@ -240,11 +281,6 @@
             padding: 20px;
             text-align: left;
             transition: 0.3s;
-        }
-
-        .build-card:hover {
-            border-color: #444;
-            background: rgba(255, 255, 255, 0.03);
         }
 
         .build-card h4 {
@@ -311,7 +347,6 @@
             margin-bottom: 2px;
         }
 
-        /* Name Tags */
         .name-tag {
             position: absolute;
             font-size: 0.6rem;
@@ -320,16 +355,28 @@
             letter-spacing: 4px;
         }
 
-        .top-left { top: 30px; left: 30px; }
-        .bottom-right { bottom: 30px; right: 30px; }
+        .top-left {
+            top: 30px;
+            left: 30px;
+        }
+
+        .bottom-right {
+            bottom: 30px;
+            right: 30px;
+        }
 
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
-            nav {
-                top: 15px;
-                right: 50%;
-                transform: translateX(50%);
-                gap: 15px;
+            nav#desktop-nav {
+                display: none;
+            }
+
+            #mobile-toggle {
+                display: block;
+            }
+
+            #mobile-nav {
+                display: flex;
             }
 
             .quote {
@@ -344,21 +391,8 @@
                 padding: 100px 20px 40px 20px;
             }
 
-            .discovery-trigger {
-                width: 32px;
-                height: 32px;
-            }
-
             .name-tag {
-                display: none; /* Hide for cleaner mobile view */
-            }
-            
-            .roadmap {
-                padding-left: 20px;
-            }
-            
-            .node::before {
-                left: -24px;
+                display: none;
             }
         }
     </style>
@@ -370,7 +404,7 @@
     <div class="name-tag top-left">salomon metre</div>
     <div class="name-tag bottom-right">© 2026 discovery</div>
 
-    <nav>
+    <nav id="desktop-nav">
         <a href="#" onclick="showPage('intro')">intro</a>
         <a href="#" onclick="showPage('learn')">learning</a>
         <a href="#" onclick="showPage('tinkerer')">projects</a>
@@ -378,6 +412,18 @@
         <a href="#" onclick="showPage('ethos')">ethos</a>
         <a href="#" onclick="showPage('education')">education</a>
     </nav>
+
+    <button id="mobile-toggle" onclick="toggleMobileMenu()">menu</button>
+    <div id="mobile-nav">
+        <a href="#" onclick="mobileNavTo('intro')">intro</a>
+        <a href="#" onclick="mobileNavTo('learn')">learning</a>
+        <a href="#" onclick="mobileNavTo('tinkerer')">projects</a>
+        <a href="#" onclick="mobileNavTo('nlp')">research</a>
+        <a href="#" onclick="mobileNavTo('ethos')">ethos</a>
+        <a href="#" onclick="mobileNavTo('education')">education</a>
+        <button onclick="toggleMobileMenu()"
+            style="background:none; border:none; color:var(--text-dim); letter-spacing:4px; margin-top:20px;">close</button>
+    </div>
 
     <div class="page-container">
         <div id="intro" class="page active">
@@ -419,11 +465,11 @@
                 Guided by boundless curiosity, I explore
                 <div class="discovery-trigger" onclick="toggleMenu(event, 'exploreMenu')">+
                     <div id="exploreMenu" class="circle-menu">
-                        <div class="menu-item" data-angle="-45">📐 Math</div>
-                        <div class="menu-item" data-angle="-15">💬 Language</div>
-                        <div class="menu-item" data-angle="-15">💻 Computer Science</div>
-                        <div class="menu-item" data-angle="15">🤔 Philosophy</div>
-                        <div class="menu-item" data-angle="45">✝️ Theology</div>
+                        <div class="menu-item" data-angle="-90">📐 Math</div>
+                        <div class="menu-item" data-angle="-18">💬 Language</div>
+                        <div class="menu-item" data-angle="54">💻 Computer Science</div>
+                        <div class="menu-item" data-angle="126">🤔 Philosophy</div>
+                        <div class="menu-item" data-angle="198">✝️ Theology</div>
                     </div>
                 </div>
                 <br>
@@ -494,7 +540,7 @@
                 </div>
             </div>
             <a href="https://github.com/SalomonMetre" target="_blank"
-                style="margin-top: 40px; color: #fff; font-size: 0.65rem; letter-spacing: 2px; text-decoration: none; border: 1px solid #333; padding: 12px 30px;">
+                style="margin-top: 40px; color: #fff; font-size: 0.7rem; letter-spacing: 2px; text-decoration: none; border: 1px solid #333; padding: 12px 30px;">
                 [GITHUB PROFILE TO VIEW MORE PROJECTS]
             </a>
         </div>
@@ -507,15 +553,13 @@
                 <div class="node">
                     <div class="time">FOCUS</div>
                     <h4>Natural Language Processing</h4>
-                    <div class="inst">Deep research into NLP, particularly Machine Translation and Language Modeling.
-                    </div>
+                    <div class="inst">Deep into NLP, particularly Machine Translation and Language Modeling.</div>
                 </div>
-
                 <div class="node">
                     <div class="time">CORE WORK</div>
-                    <h4>Architectures & Data</h4>
+                    <h4>Models & Data</h4>
                     <div class="inst">
-                        Deep into nlp, especially machine translation. I have trained
+                        Exploring machine translation and language modeling. I have trained
                         <a href="https://huggingface.co/SalomonMetre13/models" target="_blank"
                             style="color: #fff; text-decoration: underline;">models</a>
                         and have put together some
@@ -523,10 +567,9 @@
                             style="color: #fff; text-decoration: underline;">datasets</a>.
                     </div>
                 </div>
-
                 <div class="node">
                     <div class="time">CURRENT PURSUIT</div>
-                    <h4>SOTA Dissection</h4>
+                    <h4>SOTA Models Dissection</h4>
                     <div class="inst">
                         These days, i am dissecting state of the art models, exploring issues like
                         <a href="https://custom-mashi-bpe-tokenizer.streamlit.app/" target="_blank"
@@ -534,7 +577,6 @@
                         among other things.
                     </div>
                 </div>
-
                 <div class="node">
                     <div class="time">APPLICATIONS</div>
                     <h4>NLP-Centered Tools</h4>
@@ -593,8 +635,18 @@
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
             closeAllMenus();
+        }
+
+        function toggleMobileMenu() {
+            const mNav = document.getElementById('mobile-nav');
+            mNav.classList.toggle('open');
+        }
+
+        function mobileNavTo(id) {
+            showPage(id);
+            toggleMobileMenu();
         }
 
         function toggleMenu(e, menuId) {
@@ -602,15 +654,22 @@
             const menu = document.getElementById(menuId);
             const isOpen = menu.classList.contains('active');
             closeAllMenus();
+
             if (!isOpen) {
                 menu.classList.add('active');
                 const items = menu.querySelectorAll('.menu-item');
-                // Adjust radius based on screen size
-                const radius = window.innerWidth < 768 ? 100 : 130;
+
+                // Increase radius slightly for the full circle effect
+                const radius = window.innerWidth < 768 ? 100 : 140;
+
                 items.forEach(item => {
-                    const angle = parseFloat(item.getAttribute('data-angle'));
-                    const x = radius * Math.cos(angle * Math.PI / 180);
-                    const y = radius * Math.sin(angle * Math.PI / 180);
+                    const degrees = parseFloat(item.getAttribute('data-angle'));
+                    const radians = degrees * (Math.PI / 180);
+
+                    const x = radius * Math.cos(radians);
+                    const y = radius * Math.sin(radians);
+
+                    // Apply translation and a slight centering offset
                     item.style.transform = `translate(${x}px, ${y}px)`;
                 });
             }
@@ -633,7 +692,11 @@
             document.getElementById('displayPass').textContent = pass;
         }
 
-        window.onclick = closeAllMenus;
+        window.onclick = function (event) {
+            if (!event.target.matches('.discovery-trigger') && !event.target.matches('.menu-item')) {
+                closeAllMenus();
+            }
+        };
     </script>
 </body>
 
