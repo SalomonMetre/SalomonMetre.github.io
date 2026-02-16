@@ -29,9 +29,9 @@
             background-size: 40px 40px;
             color: var(--pure-white);
             font-family: 'Inter', -apple-system, sans-serif;
-            height: 100vh;
+            min-height: 100vh;
             width: 100vw;
-            overflow: hidden;
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -58,7 +58,13 @@
             z-index: 1000;
             display: flex;
             gap: 20px;
+            max-width: 90vw;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scrollbar-width: none; /* Firefox */
         }
+        
+        nav::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
         nav a {
             color: var(--text-dim);
@@ -67,6 +73,7 @@
             letter-spacing: 2px;
             text-transform: lowercase;
             transition: 0.3s;
+            white-space: nowrap;
         }
 
         nav a:hover {
@@ -77,11 +84,11 @@
             position: relative;
             z-index: 10;
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 40px;
+            padding: 80px 20px 40px 20px;
         }
 
         .page {
@@ -120,7 +127,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* ADD THIS FOR ROUNDED CORNERS */
             border-radius: 20px;
         }
 
@@ -132,7 +138,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* MATCH THE FRAME ROUNDING (slightly less to look proportional) */
             border-radius: 14px;
         }
 
@@ -142,14 +147,12 @@
             object-fit: cover;
             filter: grayscale(100%) brightness(0.8) contrast(1.1);
             transition: all 0.5s ease;
-            /* ENSURE IMAGE CORNERS ARE ROUNDED */
             border-radius: 14px;
         }
 
         .profile-photo img:hover {
             filter: grayscale(0%) brightness(1) contrast(1);
             transform: scale(1.05);
-            /* Subtle zoom effect */
         }
 
         .special-name {
@@ -308,26 +311,7 @@
             margin-bottom: 2px;
         }
 
-        /* Research Text */
-        .research-text {
-            text-align: left;
-            font-size: 1rem;
-            line-height: 1.8;
-            max-width: 900px;
-            color: #bbb;
-        }
-
-        .research-text a {
-            color: #fff;
-            text-decoration: underline;
-            text-underline-offset: 3px;
-        }
-
-        .h-gap {
-            display: inline-block;
-            width: 40px;
-        }
-
+        /* Name Tags */
         .name-tag {
             position: absolute;
             font-size: 0.6rem;
@@ -336,14 +320,46 @@
             letter-spacing: 4px;
         }
 
-        .top-left {
-            top: 30px;
-            left: 30px;
-        }
+        .top-left { top: 30px; left: 30px; }
+        .bottom-right { bottom: 30px; right: 30px; }
 
-        .bottom-right {
-            bottom: 30px;
-            right: 30px;
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            nav {
+                top: 15px;
+                right: 50%;
+                transform: translateX(50%);
+                gap: 15px;
+            }
+
+            .quote {
+                font-size: 1.5rem;
+            }
+
+            .build-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-container {
+                padding: 100px 20px 40px 20px;
+            }
+
+            .discovery-trigger {
+                width: 32px;
+                height: 32px;
+            }
+
+            .name-tag {
+                display: none; /* Hide for cleaner mobile view */
+            }
+            
+            .roadmap {
+                padding-left: 20px;
+            }
+            
+            .node::before {
+                left: -24px;
+            }
         }
     </style>
 </head>
@@ -405,6 +421,7 @@
                     <div id="exploreMenu" class="circle-menu">
                         <div class="menu-item" data-angle="-45">📐 Math</div>
                         <div class="menu-item" data-angle="-15">💬 Language</div>
+                        <div class="menu-item" data-angle="-15">💻 Computer Science</div>
                         <div class="menu-item" data-angle="15">🤔 Philosophy</div>
                         <div class="menu-item" data-angle="45">✝️ Theology</div>
                     </div>
@@ -576,6 +593,7 @@
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
             closeAllMenus();
         }
 
@@ -587,7 +605,8 @@
             if (!isOpen) {
                 menu.classList.add('active');
                 const items = menu.querySelectorAll('.menu-item');
-                const radius = 130;
+                // Adjust radius based on screen size
+                const radius = window.innerWidth < 768 ? 100 : 130;
                 items.forEach(item => {
                     const angle = parseFloat(item.getAttribute('data-angle'));
                     const x = radius * Math.cos(angle * Math.PI / 180);
