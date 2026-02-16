@@ -150,15 +150,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                filter: blur(4px);
-            }
-
-            to {
-                opacity: 1;
-                filter: blur(0);
-            }
+            from { opacity: 0; filter: blur(4px); }
+            to { opacity: 1; filter: blur(0); }
         }
 
         .profile-frame {
@@ -230,11 +223,10 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            /* Centers the anchor point */
             pointer-events: none;
             opacity: 0;
             transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-            z-index: 100;
+            z-index: 200;
         }
 
         .circle-menu.active {
@@ -244,11 +236,9 @@
 
         .menu-item {
             position: absolute;
-            /* Centers the item's own center point on the calculated X/Y coordinates */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-
             white-space: nowrap;
             background: rgba(0, 0, 0, 0.95);
             border: 1px solid #333;
@@ -264,6 +254,7 @@
         .menu-item:hover {
             color: #fff;
             border-color: #fff;
+            transform: translate(-50%, -50%) scale(1.1);
         }
 
         /* Builds Grid */
@@ -330,22 +321,9 @@
             border-radius: 50%;
         }
 
-        .node h4 {
-            font-size: 1rem;
-            font-weight: 400;
-            margin-bottom: 4px;
-        }
-
-        .node .inst {
-            color: var(--text-dim);
-            font-size: 0.8rem;
-        }
-
-        .node .time {
-            font-size: 0.7rem;
-            color: #444;
-            margin-bottom: 2px;
-        }
+        .node h4 { font-size: 1rem; font-weight: 400; margin-bottom: 4px; }
+        .node .inst { color: var(--text-dim); font-size: 0.8rem; }
+        .node .time { font-size: 0.7rem; color: #444; margin-bottom: 2px; }
 
         .name-tag {
             position: absolute;
@@ -355,45 +333,18 @@
             letter-spacing: 4px;
         }
 
-        .top-left {
-            top: 30px;
-            left: 30px;
-        }
-
-        .bottom-right {
-            bottom: 30px;
-            right: 30px;
-        }
+        .top-left { top: 30px; left: 30px; }
+        .bottom-right { bottom: 30px; right: 30px; }
 
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
-            nav#desktop-nav {
-                display: none;
-            }
-
-            #mobile-toggle {
-                display: block;
-            }
-
-            #mobile-nav {
-                display: flex;
-            }
-
-            .quote {
-                font-size: 1.5rem;
-            }
-
-            .build-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-container {
-                padding: 100px 20px 40px 20px;
-            }
-
-            .name-tag {
-                display: none;
-            }
+            nav#desktop-nav { display: none; }
+            #mobile-toggle { display: block; }
+            #mobile-nav { display: flex; }
+            .quote { font-size: 1.5rem; }
+            .build-grid { grid-template-columns: 1fr; }
+            .page-container { padding: 100px 20px 40px 20px; }
+            .name-tag { display: none; }
         }
     </style>
 </head>
@@ -421,8 +372,7 @@
         <a href="#" onclick="mobileNavTo('nlp')">research</a>
         <a href="#" onclick="mobileNavTo('ethos')">ethos</a>
         <a href="#" onclick="mobileNavTo('education')">education</a>
-        <button onclick="toggleMobileMenu()"
-            style="background:none; border:none; color:var(--text-dim); letter-spacing:4px; margin-top:20px;">close</button>
+        <button onclick="toggleMobileMenu()" style="background:none; border:none; color:var(--text-dim); letter-spacing:4px; margin-top:20px;">close</button>
     </div>
 
     <div class="page-container">
@@ -433,28 +383,24 @@
                 </div>
             </div>
             <div class="quote">
-                Hi! <br> My name is <span class="special-name">Salomon Metre</span> <br> <br>
+                Hi! <br> <br> My name is <span class="special-name"> <br> Salomon Metre</span> <br> <br>
                 I am <span id="article">a</span>
                 <div class="discovery-trigger" onclick="toggleMenu(event, 'roleMenu')">+
                     <div id="roleMenu" class="circle-menu">
                         <div class="menu-item" data-angle="-90" onclick="setRole('human', 'a')">Human</div>
-                        <div class="menu-item" data-angle="-60" onclick="setRole('budding researcher', 'a')">Researcher
-                        </div>
-                        <div class="menu-item" data-angle="-30" onclick="setRole('nlp enthusiast', 'an')">NLP Enthusiast
-                        </div>
-                        <div class="menu-item" data-angle="0" onclick="setRole('linux user (arch btw!)', 'a')">Linux
-                            User</div>
-                        <div class="menu-item" data-angle="30" onclick="setRole('programmer', 'a')">Programmer</div>
-                        <div class="menu-item" data-angle="60" onclick="setRole('Catholic (yeah, I know!)', 'a')">
-                            Catholic</div>
-                        <div class="menu-item" data-angle="90" onclick="showPage('education')">Student</div>
+                        <div class="menu-item" data-angle="-38" onclick="setRole('budding researcher', 'a')">Researcher</div>
+                        <div class="menu-item" data-angle="13" onclick="setRole('nlp enthusiast', 'an')">NLP Enthusiast</div>
+                        <div class="menu-item" data-angle="64" onclick="setRole('linux user (arch btw!)', 'a')">Linux User</div>
+                        <div class="menu-item" data-angle="115" onclick="setRole('programmer', 'a')">Programmer</div>
+                        <div class="menu-item" data-angle="167" onclick="setRole('Catholic (yeah, I know!)', 'a')">Catholic</div>
+                        <div class="menu-item" data-angle="218" onclick="showPage('education')">Student</div>
                     </div>
                 </div> <br>
                 and an explorer of
                 <div class="discovery-trigger" onclick="toggleMenu(event, 'passMenu')">+
                     <div id="passMenu" class="circle-menu">
-                        <div class="menu-item" data-angle="-30" onclick="setPass('language')">Language</div>
-                        <div class="menu-item" data-angle="30" onclick="setPass('computation')">Computation</div>
+                        <div class="menu-item" data-angle="0" onclick="setPass('language')">Language</div>
+                        <div class="menu-item" data-angle="180" onclick="setPass('computation')">Computation</div>
                     </div>
                 </div>
             </div>
@@ -476,18 +422,16 @@
                 and learn laws from
                 <div class="discovery-trigger" onclick="toggleMenu(event, 'sourceMenu')">+
                     <div id="sourceMenu" class="circle-menu">
-                        <div class="menu-item" data-angle="-40">📜 God</div>
-                        <div class="menu-item" data-angle="0">🌿 Nature</div>
-                        <div class="menu-item" data-angle="40">👥 Humans</div>
+                        <div class="menu-item" data-angle="-90">📜 God</div>
+                        <div class="menu-item" data-angle="30">🌿 Nature</div>
+                        <div class="menu-item" data-angle="150">👥 Humans</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="tinkerer" class="page">
-            <h4
-                style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 20px; font-size: 0.65rem;">
-                Selected Projects</h4>
+            <h4 style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 20px; font-size: 0.65rem;">Selected Projects</h4>
             <div class="build-grid">
                 <div class="build-card">
                     <h4>P2P Video Chat</h4>
@@ -512,20 +456,17 @@
                 <div class="build-card">
                     <h4>Wiki Scraper</h4>
                     <p>LXML script for reading Wikipedia news.</p>
-                    <a href="https://github.com/SalomonMetre/PythonStuff/tree/master/Web%20Scraping/lxml/Wiki_Scraper"
-                        target="_blank">Repository</a>
+                    <a href="https://github.com/SalomonMetre/PythonStuff/tree/master/Web%20Scraping/lxml/Wiki_Scraper" target="_blank">Repository</a>
                 </div>
                 <div class="build-card">
                     <h4>Langsphere</h4>
                     <p>Multilingual platform concept with Jessica, Joseph & Elie.</p>
-                    <a href="https://drive.google.com/file/d/1KA0XT8Qii8ZIZuy5Dv14sAAwC0MoevWS/view"
-                        target="_blank">View Doc</a>
+                    <a href="https://drive.google.com/file/d/1KA0XT8Qii8ZIZuy5Dv14sAAwC0MoevWS/view" target="_blank">View Doc</a>
                 </div>
                 <div class="build-card">
                     <h4>CS-Monk Theme</h4>
                     <p>Custom VS Code dark aesthetic theme.</p>
-                    <a href="https://vscodethemes.com/e/SalomonKulondwa.cs-monk-dark/cs-monk" target="_blank">View
-                        Theme</a>
+                    <a href="https://vscodethemes.com/e/SalomonKulondwa.cs-monk-dark/cs-monk" target="_blank">View Theme</a>
                 </div>
                 <div class="build-card">
                     <h4>Java Library System</h4>
@@ -535,20 +476,16 @@
                 <div class="build-card">
                     <h4>Games</h4>
                     <p>Akari (Flutter), Jumper & Fruit Eater (Greenfoot).</p>
-                    <a href="https://github.com/SalomonMetre/akari" target="_blank">Akari</a> | <a
-                        href="https://github.com/SalomonMetre/Jumper" target="_blank">Jumper</a>
+                    <a href="https://github.com/SalomonMetre/akari" target="_blank">Akari</a> | <a href="https://github.com/SalomonMetre/Jumper" target="_blank">Jumper</a>
                 </div>
             </div>
-            <a href="https://github.com/SalomonMetre" target="_blank"
-                style="margin-top: 40px; color: #fff; font-size: 0.7rem; letter-spacing: 2px; text-decoration: none; border: 1px solid #333; padding: 12px 30px;">
+            <a href="https://github.com/SalomonMetre" target="_blank" style="margin-top: 40px; color: #fff; font-size: 0.7rem; letter-spacing: 2px; text-decoration: none; border: 1px solid #333; padding: 12px 30px;">
                 [GITHUB PROFILE TO VIEW MORE PROJECTS]
             </a>
         </div>
 
         <div id="nlp" class="page">
-            <h4
-                style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 30px; font-size: 0.65rem;">
-                Research</h4>
+            <h4 style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 30px; font-size: 0.65rem;">Research</h4>
             <div class="roadmap">
                 <div class="node">
                     <div class="time">FOCUS</div>
@@ -558,42 +495,23 @@
                 <div class="node">
                     <div class="time">CORE WORK</div>
                     <h4>Models & Data</h4>
-                    <div class="inst">
-                        Exploring machine translation and language modeling. I have trained
-                        <a href="https://huggingface.co/SalomonMetre13/models" target="_blank"
-                            style="color: #fff; text-decoration: underline;">models</a>
-                        and have put together some
-                        <a href="https://huggingface.co/SalomonMetre13/datasets" target="_blank"
-                            style="color: #fff; text-decoration: underline;">datasets</a>.
-                    </div>
+                    <div class="inst">Exploring machine translation and language modeling. Trained <a href="https://huggingface.co/SalomonMetre13/models" target="_blank" style="color:#fff;">models</a> and <a href="https://huggingface.co/SalomonMetre13/datasets" target="_blank" style="color:#fff;">datasets</a>.</div>
                 </div>
                 <div class="node">
                     <div class="time">CURRENT PURSUIT</div>
                     <h4>SOTA Models Dissection</h4>
-                    <div class="inst">
-                        These days, i am dissecting state of the art models, exploring issues like
-                        <a href="https://custom-mashi-bpe-tokenizer.streamlit.app/" target="_blank"
-                            style="color: #fff; text-decoration: underline;">tokenization</a>,
-                        among other things.
-                    </div>
+                    <div class="inst">Dissecting models, exploring <a href="https://custom-mashi-bpe-tokenizer.streamlit.app/" target="_blank" style="color:#fff;">tokenization</a>.</div>
                 </div>
                 <div class="node">
                     <div class="time">APPLICATIONS</div>
                     <h4>NLP-Centered Tools</h4>
-                    <div class="inst">
-                        Also building nlp-centered apps:
-                        <a href="https://nnd-fr-translator2.web.app/" target="_blank"
-                            style="color: #fff; text-decoration: underline;">Nande-French translation app</a>,
-                        <a href="https://github.com/SalomonMetre/detecterreur_system" target="_blank"
-                            style="color: #fff; text-decoration: underline;">pedagogical tool</a>.
-                    </div>
+                    <div class="inst">Building <a href="https://nnd-fr-translator2.web.app/" target="_blank" style="color:#fff;">Nande-French translator</a> and <a href="https://github.com/SalomonMetre/detecterreur_system" target="_blank" style="color:#fff;">pedagogical tools</a>.</div>
                 </div>
             </div>
         </div>
 
         <div id="ethos" class="page">
-            <div class="quote"
-                style="font-style: italic; text-align: left; border-left: 2px solid var(--grid-color); padding-left: 40px;">
+            <div class="quote" style="font-style: italic; text-align: left; border-left: 2px solid var(--grid-color); padding-left: 40px;">
                 <p style="opacity: 0.3">now.</p>
                 <p style="opacity: 0.5">agape.</p>
                 <p style="opacity: 0.7">humans.</p>
@@ -603,9 +521,7 @@
         </div>
 
         <div id="education" class="page">
-            <h4
-                style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 30px; font-size: 0.65rem;">
-                Education</h4>
+            <h4 style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 30px; font-size: 0.65rem;">Education</h4>
             <div class="roadmap">
                 <div class="node">
                     <div class="time">SEPTEMBER 2025 – PRESENT</div>
@@ -635,13 +551,12 @@
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            window.scrollTo(0, 0);
+            window.scrollTo(0,0);
             closeAllMenus();
         }
 
         function toggleMobileMenu() {
-            const mNav = document.getElementById('mobile-nav');
-            mNav.classList.toggle('open');
+            document.getElementById('mobile-nav').classList.toggle('open');
         }
 
         function mobileNavTo(id) {
@@ -658,18 +573,13 @@
             if (!isOpen) {
                 menu.classList.add('active');
                 const items = menu.querySelectorAll('.menu-item');
-
-                // Increase radius slightly for the full circle effect
                 const radius = window.innerWidth < 768 ? 100 : 140;
 
                 items.forEach(item => {
                     const degrees = parseFloat(item.getAttribute('data-angle'));
                     const radians = degrees * (Math.PI / 180);
-
                     const x = radius * Math.cos(radians);
                     const y = radius * Math.sin(radians);
-
-                    // Apply translation and a slight centering offset
                     item.style.transform = `translate(${x}px, ${y}px)`;
                 });
             }
@@ -692,12 +602,11 @@
             document.getElementById('displayPass').textContent = pass;
         }
 
-        window.onclick = function (event) {
+        window.onclick = function(event) {
             if (!event.target.matches('.discovery-trigger') && !event.target.matches('.menu-item')) {
                 closeAllMenus();
             }
         };
     </script>
 </body>
-
 </html>
