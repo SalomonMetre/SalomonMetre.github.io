@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salomon Metre | Discovery</title>
+    <style>
+        :root {
+            --bg-black: #050505;
+            --grid-color: rgba(255, 255, 255, 0.05);
+            --pure-white: #ffffff;
+            --text-dim: #555555;
+            --ray-intensity: rgba(255, 255, 255, 0.12);
+            --name-shade: linear-gradient(135deg, #fff 0%, #888 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            background-image:
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: var(--pure-white);
+            font-family: 'Inter', -apple-system, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .beam {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            background: conic-gradient(from 290deg at 50% 50%,
+                    transparent 0deg, rgba(255, 255, 255, 0.01) 15deg,
+                    var(--ray-intensity) 25deg, rgba(255, 255, 255, 0.01) 35deg, transparent 50deg);
+            filter: blur(50px);
+        }
+
+        nav {
+            position: fixed;
+            top: 30px;
+            right: 40px;
+            z-index: 1000;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--pure-white);
+        }
+
+        .page-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1100px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                filter: blur(4px);
+            }
+
+            to {
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        .profile-frame {
+            width: 110px;
+            height: 110px;
+            border: 1px solid var(--grid-color);
+            padding: 8px;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.01);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* ADD THIS FOR ROUNDED CORNERS */
+            border-radius: 20px;
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* MATCH THE FRAME ROUNDING (slightly less to look proportional) */
+            border-radius: 14px;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) brightness(0.8) contrast(1.1);
+            transition: all 0.5s ease;
+            /* ENSURE IMAGE CORNERS ARE ROUNDED */
+            border-radius: 14px;
+        }
+
+        .profile-photo img:hover {
+            filter: grayscale(0%) brightness(1) contrast(1);
+            transform: scale(1.05);
+            /* Subtle zoom effect */
+        }
+
+        .special-name {
+            background: var(--name-shade);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 500;
+        }
+
+        .quote {
+            font-size: 2.2rem;
+            font-weight: 200;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* Discovery Interface */
+        .discovery-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border: 1px solid var(--text-dim);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 8px;
+            transition: 0.3s;
+            position: relative;
+            vertical-align: middle;
+        }
+
+        .discovery-trigger:hover {
+            border-color: #fff;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .circle-menu {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 100;
+        }
+
+        .circle-menu.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu-item {
+            position: absolute;
+            white-space: nowrap;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid #333;
+            padding: 6px 16px;
+            border-radius: 2px;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            color: #fff;
+            border-color: #fff;
+            background: #111;
+        }
+
+        /* Builds Grid */
+        .build-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .build-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--grid-color);
+            padding: 20px;
+            text-align: left;
+            transition: 0.3s;
+        }
+
+        .build-card:hover {
+            border-color: #444;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .build-card h4 {
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            font-weight: 400;
+            color: #ddd;
+        }
+
+        .build-card p {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .build-card a {
+            color: #fff;
+            font-size: 0.65rem;
+            text-decoration: none;
+            border-bottom: 1px solid #222;
+            margin-top: 12px;
+            display: inline-block;
+        }
+
+        /* Roadmap */
+        .roadmap {
+            width: 100%;
+            max-width: 800px;
+            border-left: 1px solid var(--grid-color);
+            padding-left: 30px;
+            text-align: left;
+        }
+
+        .node {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .node::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .node h4 {
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .node .inst {
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
+
+        .node .time {
+            font-size: 0.7rem;
+            color: #444;
+            margin-bottom: 2px;
+        }
+
+        /* Research Text */
+        .research-text {
+            text-align: left;
+            font-size: 1rem;
+            line-height: 1.8;
+            max-width: 900px;
+            color: #bbb;
+        }
+
+        .research-text a {
+            color: #fff;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .h-gap {
+            display: inline-block;
+            width: 40px;
+        }
+
+        .name-tag {
+            position: absolute;
+            font-size: 0.6rem;
+            color: #222;
+            text-transform: lowercase;
+            letter-spacing: 4px;
+        }
+
+        .top-left {
+            top: 30px;
+            left: 30px;
+        }
+
+        .bottom-right {
+            bottom: 30px;
+            right: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="beam"></div>
+    <div class="name-tag top-left">salomon metre</div>
+    <div class="name-tag bottom-right">© 2026 discovery</div>
+
+    <nav>
+        <a href="#" onclick="showPage('intro')">intro</a>
+        <a href="#" onclick="showPage('learn')">learn</a>
+        <a href="#" onclick="showPage('tinkerer')">builds</a>
+        <a href="#" onclick="showPage('nlp')">research</a>
+        <a href="#" onclick="showPage('ethos')">ethos</a>
+        <a href="#" onclick="showPage('education')">education</a>
+    </nav>
+
+    <div class="page-container">
+        <div id="intro" class="page active">
+            <div class="profile-frame">
+                <div class="profile-photo">
+                    <img src="images/profile.jpg" alt="Salomon Metre">
+                </div>
+            </div>
+            <div class="quote">
+                Hi! <br> My name is <span class="special-name">Salomon Metre</span> <br> <br>
+                I am <span id="article">a</span>
+                <div class="discovery-trigger" onclick="toggleMenu(event, 'roleMenu')">+
+                    <div id="roleMenu" class="circle-menu">
+                        <div class="menu-item" data-angle="-90" onclick="setRole('human', 'a')">Human</div>
+                        <div class="menu-item" data-angle="-60" onclick="setRole('budding researcher', 'a')">Researcher
+                        </div>
+                        <div class="menu-item" data-angle="-30" onclick="setRole('nlp enthusiast', 'an')">NLP Enthusiast
+                        </div>
+                        <div class="menu-item" data-angle="0" onclick="setRole('linux user (arch btw!)', 'a')">Linux
+                            User</div>
+                        <div class="menu-item" data-angle="30" onclick="setRole('programmer', 'a')">Programmer</div>
+                        <div class="menu-item" data-angle="60" onclick="setRole('Catholic (yeah, I know!)', 'a')">
+                            Catholic</div>
+                        <div class="menu-item" data-angle="90" onclick="showPage('education')">Student</div>
+                    </div>
+                </div> <br>
+                and an explorer of
+                <div class="discovery-trigger" onclick="toggleMenu(event, 'passMenu')">+
+                    <div id="passMenu" class="circle-menu">
+                        <div class="menu-item" data-angle="-30" onclick="setPass('language')">Language</div>
+                        <div class="menu-item" data-angle="30" onclick="setPass('computation')">Computation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="learn" class="page">
+            <div class="quote">
+                Guided by boundless curiosity, I explore
+                <div class="discovery-trigger" onclick="toggleMenu(event, 'exploreMenu')">+
+                    <div id="exploreMenu" class="circle-menu">
+                        <div class="menu-item" data-angle="-45">📐 Math</div>
+                        <div class="menu-item" data-angle="-15">💬 Language</div>
+                        <div class="menu-item" data-angle="15">🤔 Philosophy</div>
+                        <div class="menu-item" data-angle="45">✝️ Theology</div>
+                    </div>
+                </div>
+                <br>
+                and learn laws from
+                <div class="discovery-trigger" onclick="toggleMenu(event, 'sourceMenu')">+
+                    <div id="sourceMenu" class="circle-menu">
+                        <div class="menu-item" data-angle="-40">📜 God</div>
+                        <div class="menu-item" data-angle="0">🌿 Nature</div>
+                        <div class="menu-item" data-angle="40">👥 Humans</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tinkerer" class="page">
+            <h4
+                style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 20px; font-size: 0.65rem;">
+                Selected Projects</h4>
+            <div class="build-grid">
+                <div class="build-card">
+                    <h4>P2P Video Chat</h4>
+                    <p>WebRTC & Node.js peer communication.</p>
+                    <a href="https://test.swiz13-webrtc.duckdns.org/" target="_blank">Live Link</a>
+                </div>
+                <div class="build-card">
+                    <h4>Detecterreur</h4>
+                    <p>Python package for French error detection. (Collaborative)</p>
+                    <a href="https://github.com/SalomonMetre/detecterreur" target="_blank">Repository</a>
+                </div>
+                <div class="build-card">
+                    <h4>AI Ticketing System</h4>
+                    <p>Flutter/Firebase + BERT fine-tuned model.</p>
+                    <a href="https://github.com/SalomonMetre/ai-ticketing-system" target="_blank">Repository</a>
+                </div>
+                <div class="build-card">
+                    <h4>VoIP Socket Tool</h4>
+                    <p>Pure Java UDP socket calling tool.</p>
+                    <a href="https://github.com/SalomonMetre/Java-VoIP-UDP" target="_blank">Repository</a>
+                </div>
+                <div class="build-card">
+                    <h4>Wiki Scraper</h4>
+                    <p>LXML script for reading Wikipedia news.</p>
+                    <a href="https://github.com/SalomonMetre/PythonStuff/tree/master/Web%20Scraping/lxml/Wiki_Scraper"
+                        target="_blank">Repository</a>
+                </div>
+                <div class="build-card">
+                    <h4>Langsphere</h4>
+                    <p>Multilingual platform concept with Jessica, Joseph & Elie.</p>
+                    <a href="https://drive.google.com/file/d/1KA0XT8Qii8ZIZuy5Dv14sAAwC0MoevWS/view"
+                        target="_blank">View Doc</a>
+                </div>
+                <div class="build-card">
+                    <h4>CS-Monk Theme</h4>
+                    <p>Custom VS Code dark aesthetic theme.</p>
+                    <a href="https://vscodethemes.com/e/SalomonKulondwa.cs-monk-dark/cs-monk" target="_blank">View
+                        Theme</a>
+                </div>
+                <div class="build-card">
+                    <h4>Java Library System</h4>
+                    <p>Desktop application built in Java.</p>
+                    <a href="https://github.com/SalomonMetre/LibrarySystem_Java" target="_blank">Repository</a>
+                </div>
+                <div class="build-card">
+                    <h4>Games</h4>
+                    <p>Akari (Flutter), Jumper & Fruit Eater (Greenfoot).</p>
+                    <a href="https://github.com/SalomonMetre/akari" target="_blank">Akari</a> | <a
+                        href="https://github.com/SalomonMetre/Jumper" target="_blank">Jumper</a>
+                </div>
+            </div>
+            <a href="https://github.com/SalomonMetre" target="_blank"
+                style="margin-top: 40px; color: #fff; font-size: 0.65rem; letter-spacing: 2px; text-decoration: none; border: 1px solid #333; padding: 12px 30px;">
+                [GITHUB PROFILE TO VIEW MORE PROJECTS]
+            </a>
+        </div>
+
+        <div id="nlp" class="page">
+            <h4
+                style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 30px; font-size: 0.65rem;">
+                Research</h4>
+            <div class="roadmap">
+                <div class="node">
+                    <div class="time">FOCUS</div>
+                    <h4>Natural Language Processing</h4>
+                    <div class="inst">Deep research into NLP, particularly Machine Translation and Language Modeling.
+                    </div>
+                </div>
+
+                <div class="node">
+                    <div class="time">CORE WORK</div>
+                    <h4>Architectures & Data</h4>
+                    <div class="inst">
+                        Deep into nlp, especially machine translation. I have trained
+                        <a href="https://huggingface.co/SalomonMetre13/models" target="_blank"
+                            style="color: #fff; text-decoration: underline;">models</a>
+                        and have put together some
+                        <a href="https://huggingface.co/SalomonMetre13/datasets" target="_blank"
+                            style="color: #fff; text-decoration: underline;">datasets</a>.
+                    </div>
+                </div>
+
+                <div class="node">
+                    <div class="time">CURRENT PURSUIT</div>
+                    <h4>SOTA Dissection</h4>
+                    <div class="inst">
+                        These days, i am dissecting state of the art models, exploring issues like
+                        <a href="https://custom-mashi-bpe-tokenizer.streamlit.app/" target="_blank"
+                            style="color: #fff; text-decoration: underline;">tokenization</a>,
+                        among other things.
+                    </div>
+                </div>
+
+                <div class="node">
+                    <div class="time">APPLICATIONS</div>
+                    <h4>NLP-Centered Tools</h4>
+                    <div class="inst">
+                        Also building nlp-centered apps:
+                        <a href="https://nnd-fr-translator2.web.app/" target="_blank"
+                            style="color: #fff; text-decoration: underline;">Nande-French translation app</a>,
+                        <a href="https://github.com/SalomonMetre/detecterreur_system" target="_blank"
+                            style="color: #fff; text-decoration: underline;">pedagogical tool</a>.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="ethos" class="page">
+            <div class="quote"
+                style="font-style: italic; text-align: left; border-left: 2px solid var(--grid-color); padding-left: 40px;">
+                <p style="opacity: 0.3">now.</p>
+                <p style="opacity: 0.5">agape.</p>
+                <p style="opacity: 0.7">humans.</p>
+                <p style="opacity: 1.0; text-shadow: 0 0 15px #fff;">insane curiosity.</p>
+                <p style="opacity: 0.6">fair technology.</p>
+            </div>
+        </div>
+
+        <div id="education" class="page">
+            <h4
+                style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 30px; font-size: 0.65rem;">
+                Education</h4>
+            <div class="roadmap">
+                <div class="node">
+                    <div class="time">SEPTEMBER 2025 – PRESENT</div>
+                    <h4>Master of Science in Natural Language Processing</h4>
+                    <div class="inst">IDMC, Université de Lorraine, Nancy, France</div>
+                </div>
+                <div class="node">
+                    <div class="time">FEBRUARY 2024 – JUNE 2024</div>
+                    <h4>Computer Science and Cybersecurity</h4>
+                    <div class="inst">INSA Hauts-de-France, Valenciennes, France (Exchange Semester)</div>
+                </div>
+                <div class="node">
+                    <div class="time">MAY 2021 – JUNE 2025</div>
+                    <h4>Bachelors of Science in Informatics & Computer Science</h4>
+                    <div class="inst">Strathmore University, Nairobi, Kenya</div>
+                </div>
+                <div class="node">
+                    <div class="time">SEPTEMBER 2013 – JULY 2019</div>
+                    <h4>High School Diploma in Mathematics-Physics</h4>
+                    <div class="inst">Collège Alfajiri, Bukavu, D.R. Congo</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            closeAllMenus();
+        }
+
+        function toggleMenu(e, menuId) {
+            e.stopPropagation();
+            const menu = document.getElementById(menuId);
+            const isOpen = menu.classList.contains('active');
+            closeAllMenus();
+            if (!isOpen) {
+                menu.classList.add('active');
+                const items = menu.querySelectorAll('.menu-item');
+                const radius = 130;
+                items.forEach(item => {
+                    const angle = parseFloat(item.getAttribute('data-angle'));
+                    const x = radius * Math.cos(angle * Math.PI / 180);
+                    const y = radius * Math.sin(angle * Math.PI / 180);
+                    item.style.transform = `translate(${x}px, ${y}px)`;
+                });
+            }
+        }
+
+        function closeAllMenus() {
+            document.querySelectorAll('.circle-menu').forEach(m => {
+                m.classList.remove('active');
+                m.querySelectorAll('.menu-item').forEach(i => i.style.transform = 'translate(0,0)');
+            });
+        }
+
+        function setRole(role, art) {
+            document.getElementById('displayRole').textContent = role;
+            document.getElementById('article').textContent = art;
+            if (role === 'budding researcher') setTimeout(() => showPage('nlp'), 300);
+        }
+
+        function setPass(pass) {
+            document.getElementById('displayPass').textContent = pass;
+        }
+
+        window.onclick = closeAllMenus;
+    </script>
+</body>
+
+</html>
