@@ -150,8 +150,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; filter: blur(4px); }
-            to { opacity: 1; filter: blur(0); }
+            from {
+                opacity: 0;
+                filter: blur(4px);
+            }
+
+            to {
+                opacity: 1;
+                filter: blur(0);
+            }
         }
 
         .profile-frame {
@@ -216,6 +223,7 @@
             transition: 0.3s;
             position: relative;
             vertical-align: middle;
+            animation: softPulse 2.5s ease-in-out infinite;
         }
 
         .circle-menu {
@@ -321,9 +329,22 @@
             border-radius: 50%;
         }
 
-        .node h4 { font-size: 1rem; font-weight: 400; margin-bottom: 4px; }
-        .node .inst { color: var(--text-dim); font-size: 0.8rem; }
-        .node .time { font-size: 0.7rem; color: #444; margin-bottom: 2px; }
+        .node h4 {
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .node .inst {
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
+
+        .node .time {
+            font-size: 0.7rem;
+            color: #444;
+            margin-bottom: 2px;
+        }
 
         .name-tag {
             position: absolute;
@@ -333,18 +354,87 @@
             letter-spacing: 4px;
         }
 
-        .top-left { top: 30px; left: 30px; }
-        .bottom-right { bottom: 30px; right: 30px; }
+        .top-left {
+            top: 30px;
+            left: 30px;
+        }
+
+        .bottom-right {
+            bottom: 30px;
+            right: 30px;
+        }
 
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
-            nav#desktop-nav { display: none; }
-            #mobile-toggle { display: block; }
-            #mobile-nav { display: flex; }
-            .quote { font-size: 1.5rem; }
-            .build-grid { grid-template-columns: 1fr; }
-            .page-container { padding: 100px 20px 40px 20px; }
-            .name-tag { display: none; }
+            nav#desktop-nav {
+                display: none;
+            }
+
+            #mobile-toggle {
+                display: block;
+            }
+
+            #mobile-nav {
+                display: flex;
+            }
+
+            .quote {
+                font-size: 1.5rem;
+            }
+
+            .build-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-container {
+                padding: 100px 20px 40px 20px;
+            }
+
+            .name-tag {
+                display: none;
+            }
+        }
+
+        /* ===== CLICK INVITATION BLINK ===== */
+        @keyframes softBlink {
+            0% {
+                opacity: 0.6;
+                box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+                transform: scale(1.08);
+            }
+
+            100% {
+                opacity: 0.6;
+                box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+                transform: scale(1);
+            }
+        }
+
+        /* === DISCOVERY-TRIGGER PULSE === */
+        @keyframes softPulse {
+            0% {
+                opacity: 0.6;
+                box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+                transform: scale(1.08);
+            }
+
+            100% {
+                opacity: 0.6;
+                box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+                transform: scale(1);
+            }
         }
     </style>
 </head>
@@ -352,7 +442,7 @@
 <body>
 
     <div class="beam"></div>
-    <div class="name-tag top-left">salomon metre</div>
+    <!-- <div class="name-tag top-left">salomon metre</div> -->
     <div class="name-tag bottom-right">© 2026 discovery</div>
 
     <nav id="desktop-nav">
@@ -372,7 +462,8 @@
         <a href="#" onclick="mobileNavTo('nlp')">research</a>
         <a href="#" onclick="mobileNavTo('ethos')">ethos</a>
         <a href="#" onclick="mobileNavTo('education')">education</a>
-        <button onclick="toggleMobileMenu()" style="background:none; border:none; color:var(--text-dim); letter-spacing:4px; margin-top:20px;">close</button>
+        <button onclick="toggleMobileMenu()"
+            style="background:none; border:none; color:var(--text-dim); letter-spacing:4px; margin-top:20px;">close</button>
     </div>
 
     <div class="page-container">
@@ -388,11 +479,15 @@
                 <div class="discovery-trigger" onclick="toggleMenu(event, 'roleMenu')">⊕
                     <div id="roleMenu" class="circle-menu">
                         <div class="menu-item" data-angle="-90" onclick="setRole('human', 'a')">Human</div>
-                        <div class="menu-item" data-angle="-38" onclick="setRole('budding researcher', 'a')">Researcher</div>
-                        <div class="menu-item" data-angle="13" onclick="setRole('nlp enthusiast', 'an')">NLP Enthusiast</div>
-                        <div class="menu-item" data-angle="64" onclick="setRole('linux user (arch btw!)', 'a')">Linux User</div>
+                        <div class="menu-item" data-angle="-38" onclick="setRole('budding researcher', 'a')">Researcher
+                        </div>
+                        <div class="menu-item" data-angle="13" onclick="setRole('nlp enthusiast', 'an')">NLP Enthusiast
+                        </div>
+                        <div class="menu-item" data-angle="64" onclick="setRole('linux user (arch btw!)', 'a')">Linux
+                            User</div>
                         <div class="menu-item" data-angle="115" onclick="setRole('programmer', 'a')">Programmer</div>
-                        <div class="menu-item" data-angle="167" onclick="setRole('Catholic (yeah, I know!)', 'a')">Catholic</div>
+                        <div class="menu-item" data-angle="167" onclick="setRole('Catholic (yeah, I know!)', 'a')">
+                            Catholic</div>
                         <div class="menu-item" data-angle="218" onclick="showPage('education')">Student</div>
                     </div>
                 </div>
@@ -432,7 +527,9 @@
         </div>
 
         <div id="tinkerer" class="page">
-            <h4 style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 20px; font-size: 0.65rem;">Selected Projects</h4>
+            <h4
+                style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 20px; font-size: 0.65rem;">
+                Selected Projects</h4>
             <div class="build-grid">
                 <div class="build-card">
                     <h4>Owinyu</h4>
@@ -457,17 +554,21 @@
                 <div class="build-card">
                     <h4>Wiki Scraper</h4>
                     <p>Python script for reading Wikipedia news.</p>
-                    <a href="https://github.com/SalomonMetre/PythonStuff/tree/master/Web%20Scraping/lxml/Wiki_Scraper" target="_blank">Repository</a>
+                    <a href="https://github.com/SalomonMetre/PythonStuff/tree/master/Web%20Scraping/lxml/Wiki_Scraper"
+                        target="_blank">Repository</a>
                 </div>
                 <div class="build-card">
                     <h4>Langsphere</h4>
-                    <p>Multilingual platform for low-resource african languages (Collaborative: ft. Jessica, Joseph & Elie) </p>
-                    <a href="https://drive.google.com/file/d/1KA0XT8Qii8ZIZuy5Dv14sAAwC0MoevWS/view" target="_blank">View Doc</a>
+                    <p>Multilingual platform for low-resource african languages (Collaborative: ft. Jessica, Joseph &
+                        Elie) </p>
+                    <a href="https://drive.google.com/file/d/1KA0XT8Qii8ZIZuy5Dv14sAAwC0MoevWS/view"
+                        target="_blank">View Doc</a>
                 </div>
                 <div class="build-card">
                     <h4>CS-Monk Theme</h4>
                     <p>Custom VS Code dark aesthetic theme.</p>
-                    <a href="https://vscodethemes.com/e/SalomonKulondwa.cs-monk-dark/cs-monk" target="_blank">View Theme</a>
+                    <a href="https://vscodethemes.com/e/SalomonKulondwa.cs-monk-dark/cs-monk" target="_blank">View
+                        Theme</a>
                 </div>
                 <div class="build-card">
                     <h4>Java Library System</h4>
@@ -477,16 +578,20 @@
                 <div class="build-card">
                     <h4>Games</h4>
                     <p>Akari (Flutter), Jumper & Fruit Eater (Greenfoot).</p>
-                    <a href="https://github.com/SalomonMetre/akari" target="_blank">Akari</a> | <a href="https://github.com/SalomonMetre/Jumper" target="_blank">Jumper</a>
+                    <a href="https://github.com/SalomonMetre/akari" target="_blank">Akari</a> | <a
+                        href="https://github.com/SalomonMetre/Jumper" target="_blank">Jumper</a>
                 </div>
             </div>
-            <a href="https://github.com/SalomonMetre" target="_blank" style="margin-top: 40px; color: #fff; font-size: 0.7rem; letter-spacing: 2px; text-decoration: none; border: 1px solid #333; padding: 12px 30px;">
+            <a href="https://github.com/SalomonMetre" target="_blank"
+                style="margin-top: 40px; color: #fff; font-size: 0.7rem; letter-spacing: 2px; text-decoration: none; border: 1px solid #333; padding: 12px 30px;">
                 [GITHUB PROFILE TO VIEW MORE PROJECTS]
             </a>
         </div>
 
         <div id="nlp" class="page">
-            <h4 style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 30px; font-size: 0.65rem;">Research</h4>
+            <h4
+                style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 30px; font-size: 0.65rem;">
+                Research</h4>
             <div class="roadmap">
                 <div class="node">
                     <div class="time">FOCUS</div>
@@ -496,23 +601,32 @@
                 <div class="node">
                     <div class="time">CORE WORK</div>
                     <h4>Models & Data</h4>
-                    <div class="inst">Exploring machine translation and language modeling. Trained <a href="https://huggingface.co/SalomonMetre13/models" target="_blank" style="color:#fff;">models</a> and <a href="https://huggingface.co/SalomonMetre13/datasets" target="_blank" style="color:#fff;">datasets</a>.</div>
+                    <div class="inst">Exploring machine translation and language modeling. Trained <a
+                            href="https://huggingface.co/SalomonMetre13/models" target="_blank"
+                            style="color:#fff;">models</a> and <a href="https://huggingface.co/SalomonMetre13/datasets"
+                            target="_blank" style="color:#fff;">datasets</a>.</div>
                 </div>
                 <div class="node">
                     <div class="time">CURRENT PURSUIT</div>
                     <h4>SOTA Models Dissection</h4>
-                    <div class="inst">Dissecting models, exploring <a href="https://custom-mashi-bpe-tokenizer.streamlit.app/" target="_blank" style="color:#fff;">tokenization</a>.</div>
+                    <div class="inst">Dissecting models, exploring <a
+                            href="https://custom-mashi-bpe-tokenizer.streamlit.app/" target="_blank"
+                            style="color:#fff;">tokenization</a>.</div>
                 </div>
                 <div class="node">
                     <div class="time">APPLICATIONS</div>
                     <h4>NLP-Centered Tools</h4>
-                    <div class="inst">Built the <a href="https://nnd-fr-translator2.web.app/" target="_blank" style="color:#fff;">Nande-French translator</a>, a <a href="https://github.com/SalomonMetre/detecterreur_system" target="_blank" style="color:#fff;">pedagogical tool, </a>etc.</div>
+                    <div class="inst">Built the <a href="https://nnd-fr-translator2.web.app/" target="_blank"
+                            style="color:#fff;">Nande-French translator</a>, a <a
+                            href="https://github.com/SalomonMetre/detecterreur_system" target="_blank"
+                            style="color:#fff;">pedagogical tool, </a>etc.</div>
                 </div>
             </div>
         </div>
 
         <div id="ethos" class="page">
-            <div class="quote" style="font-style: italic; text-align: left; border-left: 2px solid var(--grid-color); padding-left: 40px;">
+            <div class="quote"
+                style="font-style: italic; text-align: left; border-left: 2px solid var(--grid-color); padding-left: 40px;">
                 <p style="opacity: 0.3">now.</p>
                 <p style="opacity: 0.5">agape.</p>
                 <p style="opacity: 0.7">humans.</p>
@@ -522,7 +636,9 @@
         </div>
 
         <div id="education" class="page">
-            <h4 style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 30px; font-size: 0.65rem;">Education</h4>
+            <h4
+                style="letter-spacing: 4px; color: #444; text-transform: uppercase; margin-bottom: 30px; font-size: 0.65rem;">
+                Education</h4>
             <div class="roadmap">
                 <div class="node">
                     <div class="time">SEPTEMBER 2025 – PRESENT</div>
@@ -557,7 +673,7 @@
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
             closeAllMenus();
         }
 
@@ -608,11 +724,12 @@
             document.getElementById('displayPass').textContent = pass;
         }
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (!event.target.matches('.discovery-trigger') && !event.target.matches('.menu-item')) {
                 closeAllMenus();
             }
         };
     </script>
 </body>
+
 </html>
